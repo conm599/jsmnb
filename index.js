@@ -1,7 +1,7 @@
-// Cloudflare Workers 脚本 - D1数据库数据库请求中转服务
+// Cloudflare Workers D1数据库请求中转服务
 export default {
   async fetch(request, env, ctx) {
-    // 处理CORS
+    // 处理跨域请求
     if (request.method === 'OPTIONS') {
       return handleOptions(request);
     }
@@ -32,20 +32,7 @@ export default {
         });
       }
 
-      // 验证请求来源（可选，根据需要添加）
-      // const allowedOrigins = ['https://your-frontend-domain.com'];
-      // const origin = request.headers.get('Origin');
-      // if (!allowedOrigins.includes(origin)) {
-      //   return new Response(JSON.stringify({
-      //     success: false,
-      //     error: '不允许的来源'
-      //   }), {
-      //     status: 403,
-      //     headers: getCorsHeaders(origin)
-      //   });
-      // }
-
-      // 处理数据库操作（已将DB改为db）
+      // 处理数据库操作
       let result;
       switch (body.action) {
         case 'exec':
@@ -108,7 +95,7 @@ function handleOptions(request) {
     headers: {
       ...getCorsHeaders(origin),
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Headers': 'Content-Type',
     }
   });
 }
@@ -119,7 +106,7 @@ function getCorsHeaders(origin) {
     'Content-Type': 'application/json',
   };
   
-  // 如果有来源，添加CORS头
+  // 允许所有来源访问（开发环境用，生产环境建议限制）
   if (origin) {
     headers['Access-Control-Allow-Origin'] = origin;
     headers['Vary'] = 'Origin';
@@ -127,3 +114,4 @@ function getCorsHeaders(origin) {
   
   return headers;
 }
+    
