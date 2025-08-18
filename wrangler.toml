@@ -1,0 +1,9 @@
+name = "你的worker名称"
+main = "index.js"
+compatibility_date = "2024-08-01"
+
+# 添加D1数据库绑定（binding值为"db"，与代码中的env.db对应）
+[[d1_databases]]
+binding = "db"
+database_name = "步骤3中创建的数据库名称"
+database_id = "步骤3中得到的数据库ID"
